@@ -1,0 +1,33 @@
+.dubai, .shanghai {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%; }
+
+.dubai {
+  background-image: url("../img/dubai.jpg"); }
+
+.shanghai {
+  background-image: url("../img/shanghai.jpg"); }
+
+.well {
+  filter: alpha(opacity=82);
+  opacity: 0.82;
+  background-color: #ededed;
+  border-width: 5px;
+  padding-left: 19px; }
+  .well h1 {
+    font-weight: 900;
+    margin-bottom: 19px;
+    letter-spacing: 1px; }
+
+.login-center {
+  margin-left: 30%; }
+
+.nero {
+  font-weight: 600;
+  background-color: #bfbfbf; }
+  .nero:hover {
+    background-color: #b3b3b3; }
+
+/*# sourceMappingURL=login.css.map */
