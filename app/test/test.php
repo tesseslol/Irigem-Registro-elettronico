@@ -42,14 +42,23 @@ include "core.php"; // contiene la classe CoreFunction
  *      - Lettura di un json (il meno datato) e auto-configurare delle form(per evitare di riscrivere tutto)
  *
  *    FAQS::
- *      Sarà possibile gestire delle eccezioni riguardanti ad un renge di orario (esp: il prof xx stò a casa la 1° e la 3° ora)???
+ *      Sarà possibile gestire delle eccezioni riguardanti ad un range di orario (esp: il prof xx stò a casa la 1° e la 3° ora)???
+ *
+ *    Strottura Array Per l'argoritmo:
+ *
+ *    Professore:
+ *      nome: string
+ *      cognome: string
+ *      materie:
+ *        nome: string
+ *        codice: string
+ *
+ *
  *
  */
 
-
 /* Impostazioni */
 $ORD_PROF = ["0","1","2","3","4","5"];
-$WEEK = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
 $INSEGNANTI = $CALENDARIO["insegnanti"];
 $FESTIVI = $CALENDARIO["festivi"];
 $RIPOSO = $FESTIVI["giorni"]["riposo"];
@@ -61,25 +70,13 @@ $NR_CLASSI = count($CALENDARIO["nr_classi"]);
 $NR_FESTIVI = count($FESTIVI["data"]);
 $NR_PROF = count($INSEGNANTI);
 
-$CORE = new CoreFunct();
-
 // algoritmo che dà un punteggio ai professori
 for ($prof = 0; $prof < $NR_PROF; $prof++) {
   for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
     $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
     $rientro = new Scuola($DATE_SCUOLA, $classroom);
     $scuola = new Rientro($RIENTRO_CLASSE, $classroom);
-    $festivi = new Festivi();
-  }
-}
-
-// algoritmo che dà un punteggio ai professori
-for ($prof = 0; $prof < $NR_PROF; $prof++) {
-  for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
-    $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
-    $rientro = new Scuola($DATE_SCUOLA, $classroom);
-    $scuola = new Rientro($RIENTRO_CLASSE, $classroom);
-    $festivi = new Festivi();
+    // $festivi = new Festivi();
   }
 }
 
@@ -134,9 +131,6 @@ class InsegnanteMateria extends Insegnante {
   */
   function calcoloPunteggio($tot_ore, $disp, $preferenzeGiorni) {
     return $tot_ore + $disp + $preferenzeGiorni;
-    if () {
-
-    }
   }
  /**
   *
@@ -227,14 +221,20 @@ class Scuola extends Classe {
   function __construct($Scuola, $classe) {
     parent::__construct($Scuola, $classe);
     // reti
-    $this -> settimaneReti = $this -> reti["settimane"];
-    $this -> oreReti = $this -> reti["ore"];
     $this -> inizioReti = $this -> reti["inizio"];
     $this -> fineReti = $this -> reti["fine"];
     // multi
-    $this -> settimaneMulti = $this -> multi["settimane"];
-    $this -> oreMulti = $this -> multi["ore"];
     $this -> inizioMulti = $this -> multi["inizio"];
     $this -> fineMulti = $this -> multi["fine"];
+  }
+}
+
+class Today {
+  function __construct ($date, $rientro_inizio, $rientro_fine, $giorno_rientro) {
+    $this -> data = $date;
+    $this -> giorno = getWeekday($date);
+    $this -> festivo = isHoliday($date);
+    $this -> rientro = isReentryDay($data, $rientro_inizio, $rientro_fine, $giorno_rientro);
+    $this -> riposo = isDayOfRest($date);
   }
 }

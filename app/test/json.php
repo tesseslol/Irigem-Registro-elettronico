@@ -11,14 +11,14 @@ $CALENDARIO = [
         "classe"=>[
           "1"=>[
             "reti"=>[
-                "a"=>[
-                  "punteggio"=>0,
-                  "ore"=>6
-                ],
-                "b"=>[
-                  "punteggio"=>0,
-                  "ore"=>5
-                ]
+              "a"=>[
+                "punteggio"=>0,
+                "ore"=>6
+              ],
+              "b"=>[
+                "punteggio"=>0,
+                "ore"=>5
+              ]
             ],
             "multi"=>[
               "m"=>[
@@ -29,14 +29,14 @@ $CALENDARIO = [
           ],
           "2"=>[
             "reti"=>[
-                "a"=>[
-                  "punteggio"=>0,
-                  "ore"=>6
-                ],
-                "b"=>[
-                  "punteggio"=>0,
-                  "ore"=>5
-                ]
+              "a"=>[
+                "punteggio"=>0,
+                "ore"=>6
+              ],
+              "b"=>[
+                "punteggio"=>0,
+                "ore"=>5
+              ]
             ],
             "multi"=>[
               "m"=>[
@@ -47,14 +47,14 @@ $CALENDARIO = [
           ],
           "3"=>[
             "reti"=>[
-                "a"=>[
-                  "punteggio"=>0,
-                  "ore"=>6
-                ],
-                "b"=>[
-                  "punteggio"=>0,
-                  "ore"=>5
-                ]
+              "a"=>[
+                "punteggio"=>0,
+                "ore"=>6
+              ],
+              "b"=>[
+                "punteggio"=>0,
+                "ore"=>5
+              ]
             ],
             "multi"=>[
               "m"=>[
@@ -65,14 +65,14 @@ $CALENDARIO = [
           ],
           "4"=>[
             "reti"=>[
-                "a"=>[
-                  "punteggio"=>0,
-                  "ore"=>6
-                ],
-                "b"=>[
-                  "punteggio"=>0,
-                  "ore"=>5
-                ]
+              "a"=>[
+                "punteggio"=>0,
+                "ore"=>6
+              ],
+              "b"=>[
+                "punteggio"=>0,
+                "ore"=>5
+              ]
             ],
             "multi"=>[
               "m"=>[
@@ -106,7 +106,7 @@ $CALENDARIO = [
           /* giorno della settimana in cui il prof è a casa */
           "giorni"=>[
             [
-              "6"
+              "giovedì"
             ]
           ]
         ]
@@ -137,7 +137,7 @@ $CALENDARIO = [
         ],
         "multi"=>[
           "giorni"=>["mercoledì"],
-          "ore"=> 8,
+          "ore"=>8,
           "data"=>[
             "inizio"=>"2016/12/24",
             "fine"=>"2017/05/12"
@@ -155,7 +155,7 @@ $CALENDARIO = [
         ],
         "multi"=>[
           "giorni"=>["mercoledì"],
-          "ore"=> 8,
+          "ore"=>8,
           "data"=>[
             "inizio"=>"2016/12/24",
             "fine"=>"2017/05/12"
@@ -173,7 +173,7 @@ $CALENDARIO = [
         ],
         "multi"=>[
           "giorni"=>["mercoledì"],
-          "ore"=> 8,
+          "ore"=>8,
           "data"=>[
             "inizio"=>"2016/12/24",
             "fine"=>"2017/05/12"
@@ -191,7 +191,7 @@ $CALENDARIO = [
         ],
         "multi"=>[
           "giorni"=>["mercoledì"],
-          "ore"=> 8,
+          "ore"=>8,
           "data"=>[
             "inizio"=>"2016/12/24",
             "fine"=>"2017/05/12"
@@ -204,61 +204,59 @@ $CALENDARIO = [
     "classe"=>[
       "1"=>[
         "reti"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "2"=>[
         "reti"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "3"=>[
         "reti"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "4"=>[
         "reti"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
-          "settimane"=>23,
-          "ore"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ]
     ]
   ],
-  "nr_classi"=>4
+  "nr_classi"=>4,
+  "orario"=>[
+    "lezioni"=>[
+      "8.15",
+      "9.15",
+      "10.15",
+      "11.15",
+      "11.25",
+      "12.25",
+      "14.15",
+      "15.15",
+      "16.15",
+      "17.15"
+    ]
+  ]
 ];
