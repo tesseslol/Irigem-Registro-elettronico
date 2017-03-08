@@ -80,6 +80,17 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
   }
 }
 
+// algoritmo che dà un punteggio ai professori
+for ($prof = 0; $prof < $NR_PROF; $prof++) {
+  for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
+    $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
+    $rientro = new Scuola($DATE_SCUOLA, $classroom);
+    $scuola = new Rientro($RIENTRO_CLASSE, $classroom);
+    $todayReti = new Today($scuola -> inizioReti);
+    $todayMulti = new Today($scuola -> inizioMulti);
+  }
+}
+
 // questa classe può essere ottimizzata -> prof
 class Insegnante {
   function __construct($insegnante, $insegnanti, $classe) {
@@ -230,11 +241,16 @@ class Scuola extends Classe {
 }
 
 class Today {
-  function __construct ($date, $rientro_inizio, $rientro_fine, $giorno_rientro) {
+  function __construct ($date) {
     $this -> data = $date;
     $this -> giorno = getWeekday($date);
     $this -> festivo = isHoliday($date);
-    $this -> rientro = isReentryDay($data, $rientro_inizio, $rientro_fine, $giorno_rientro);
+    $this -> riposo = isDayOfRest($date);
+  }
+  function addOneDay () {
+    $this -> data = calculateDate($date, 1);
+    $this -> giorno = getWeekday($date);
+    $this -> festivo = isHoliday($date);
     $this -> riposo = isDayOfRest($date);
   }
 }
