@@ -44,16 +44,6 @@ include "core.php"; // contiene la classe CoreFunction
  *    FAQS::
  *      Sarà possibile gestire delle eccezioni riguardanti ad un range di orario (esp: il prof xx stò a casa la 1° e la 3° ora)???
  *
- *    Strottura Array Per l'argoritmo:
- *
- *    Professore:
- *      nome: string
- *      cognome: string
- *      materie:
- *        nome: string
- *        codice: string
- *
- *
  *
  */
 
@@ -64,30 +54,54 @@ $FESTIVI = $CALENDARIO["festivi"];
 $RIPOSO = $FESTIVI["giorni"]["riposo"];
 $RIENTRO_CLASSE = $CALENDARIO["rientro"]["classe"];
 $DATE_SCUOLA = $CALENDARIO["date_scuola"]["classe"];
+$ORARIO = $CALENDARIO["orario"]["lezioni"];
 
 $NR_GIORNI_RIPOSO = count($RIPOSO);
 $NR_CLASSI = count($CALENDARIO["nr_classi"]);
 $NR_FESTIVI = count($FESTIVI["data"]);
 $NR_PROF = count($INSEGNANTI);
 
-// algoritmo che dà un punteggio ai professori
+// @TODO algoritmo calcolo importanza professori
 for ($prof = 0; $prof < $NR_PROF; $prof++) {
   for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
     $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
-    $rientro = new Scuola($DATE_SCUOLA, $classroom);
-    $scuola = new Rientro($RIENTRO_CLASSE, $classroom);
-    // $festivi = new Festivi();
+    $scuola = new Scuola($DATE_SCUOLA, $classroom);
   }
 }
 
-// algoritmo che dà un punteggio ai professori
+// algoritmo che posiziona i professori
 for ($prof = 0; $prof < $NR_PROF; $prof++) {
   for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
     $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
-    $rientro = new Scuola($DATE_SCUOLA, $classroom);
-    $scuola = new Rientro($RIENTRO_CLASSE, $classroom);
-    $todayReti = new Today($scuola -> inizioReti);
-    $todayMulti = new Today($scuola -> inizioMulti);
+    $scuola = new Scuola($DATE_SCUOLA, $classroom);
+    $rientro = new Rientro($RIENTRO_CLASSE, $classroom);
+    $todayReti = new Today($scuola -> inizioReti, $rientro -> giorniReti);
+    $todayMulti = new Today($scuola -> inizioMulti, $rientro -> giorniMulti);
+    // ciclo per la classe reti
+    while (isSameDay($todayReti, $scuola -> fineReti)) {
+      if ($todayReti -> festivo === false && $todayReti -> riposo === false) {
+        $reentry = isReentryDay($todayReti -> data, $rientro -> inizioReti, $rientro -> fineReti, $todayReti -> giorno());
+        if ($reentry) {
+          $todayHour = $rientro -> oreReti;
+        } else {
+          $todayHour = 5;
+        }
+        $currentHour = $ORARIO[0];
+        // cicla per l'orario
+        for ($i = 0; getDifferencesBeetweenHours($currentHour, $ORARIO[0]) == $todayHour; $i++) {
+          if ($i == 3 && $i == 6) {
+            continue;
+          } elseif ($todayHour == $i) {
+            break 1;
+          }
+          $currentHour = $ORARIO[$i + 1];
+        }
+      }
+      $todayReti -> addOneDay();
+    }
+
+    // ciclo per la classe multi
+
   }
 }
 
@@ -96,12 +110,10 @@ class Insegnante {
   function __construct($insegnante, $insegnanti, $classe) {
     $this -> prof = $insegnanti[$insegnante];
     $this -> materia = $this -> prof["materia"];
-    $this -> preferenze = $this -> materia["preferenze"];
-    $this -> sezione = $this -> materia["classe"][$classe];
-    $this -> reti = $this -> sezione["reti"];
-    $this -> multi = $this -> sezione["multi"]["m"];
-    $this -> retiA = $this -> reti["a"];
-    $this -> retiB = $this -> reti["b"];
+    $this -> preferenze = $this -> materia["preferenze"] || null;
+    $this -> sezione = $this -> materia["classe"][$classe] || null;
+    $this -> reti = $this -> sezione["reti"] || null;
+    $this -> multi = $this -> sezione["multi"] || null;
   }
 }
 
@@ -112,15 +124,13 @@ class InsegnanteMateria extends Insegnante {
     $this -> codiceMateria = $this -> materia["codice"];
     $this -> nomeMateria = $this -> materia["nome"];
     // nr totali ore classe e punteggio che ha quella classe
-    $this -> oreTotaliRetiA = $this -> retiA["ore"];
-    $this -> oreTotaliRetiB = $this -> retiB["ore"];
-    $this -> oreTotaliMulti = $this -> multi["ore"];
-    $this -> punteggioRetiA = $this -> retiA["punteggio"];
-    $this -> punteggioRetiB = $this -> retiB["punteggio"];
-    $this -> punteggioMulti = $this -> multi["punteggio"];
+    $this -> oreTotaliReti = $this -> reti["ore"] || 0;
+    $this -> oreTotaliMulti = $this -> multi["ore"] || 0;
+    $this -> punteggioReti = $this -> reti["punteggio"] || 0;
+    $this -> punteggioMulti = $this -> multi["punteggio"] || 0;
     // preferenze orario
-    $this -> preferenzeOre = $this -> preferenze["ore"]["classe"][$classe];
-    $this -> preferenzeGiorni = $this -> preferenze["giorni"]; // array
+    $this -> preferenzeOre = $this -> preferenze["ore"]["classe"][$classe] || null;
+    $this -> preferenzeGiorni = $this -> preferenze["giorni"] || null; // array
   }
 
  /**
@@ -137,8 +147,6 @@ class InsegnanteMateria extends Insegnante {
   * - inizio rientro
   * - fine rientro
   * - materie ore
-  *
-  *
   */
   function calcoloPunteggio($tot_ore, $disp, $preferenzeGiorni) {
     return $tot_ore + $disp + $preferenzeGiorni;
@@ -194,7 +202,7 @@ class InsegnanteMateria extends Insegnante {
 class Festivi {
   function __construct($festivi) {
     $this -> data = $festivi["data"];
-    $this -> giorniRiposo = $festivi["giorni"]; // array
+    $this -> giorniRiposo = $festivi["giorni"] || null; // array
   }
   function feste($index) {
     $this -> feste = $this -> data[$index];
@@ -241,16 +249,19 @@ class Scuola extends Classe {
 }
 
 class Today {
-  function __construct ($date) {
+  function __construct ($date, $rest) {
     $this -> data = $date;
+    $this -> rest = $rest;
     $this -> giorno = getWeekday($date);
     $this -> festivo = isHoliday($date);
-    $this -> riposo = isDayOfRest($date);
+    $this -> riposo = isDayOfRest($date, $rest);
   }
-  function addOneDay () {
-    $this -> data = calculateDate($date, 1);
+
+  function addOneDay ($rest) {
+    $this -> data = calculateDate($this -> data, 1);
+    $this -> rest = $rest;
     $this -> giorno = getWeekday($date);
     $this -> festivo = isHoliday($date);
-    $this -> riposo = isDayOfRest($date);
+    $this -> riposo = isDayOfRest($date, $rest);
   }
 }

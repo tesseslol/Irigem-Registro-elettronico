@@ -39,16 +39,15 @@ function isDayOfRest ($rest, $date) {
   return result;
 }
 
-function isReentryDay ($data, $inizio, $fine, $rientro) {
-  if ($inizio <= $date && $fine >= $date) {
-    if (getWeekdayInItaly($date) == $rientro) {
-      return true;
-    } else {
-      return false;
+function isReentryDay ($data, $inizio, $fine, $rientri) {
+  $result = false;
+  foreach ($rientri as $rientro) {
+    if ($inizio <= $date && $fine >= $date && getWeekdayInItaly($date) == $rientro) {
+      $result = true;
+      break 1;
     }
-  } else {
-    return false;
   }
+  return $result;
 }
 /**
  * Verifica se le date immesse sono le stesse
@@ -163,6 +162,17 @@ function getDifferencesBeetweenTimes ($date1, $date2) {
     $diff =  $date2 - $date1;
   }
   return sprintf("%02d", floor(($diff / (60 * 60)) % 24)) . ":" . sprintf("%02d", floor(($diff / 60) % 60));
+}
+
+function getDifferencesBeetweenHours ($date1, $date2) {
+  $date1 = strtotime($date1);
+  $date2 = strtotime($date2);
+  if ($date1 > $date2) {
+    $diff =  $date1 - $date2;
+  } else {
+    $diff =  $date2 - $date1;
+  }
+  return floor(($diff / (60 * 60)) % 24);
 }
 
 function getTotalWeek ($date1, $date2) {
