@@ -4,48 +4,48 @@ include "json.php"; // contiene la variabile-array calendario
 include "core.php"; // contiene la classe CoreFunction
 
 /**
- * @DISCLAIMER::
- *  Per funzionare correttamente bisogna cavare via il tempo massimo di esecuzione del codice
- *
- * @TODO:: ## ALGORITMO CALENDARIO ##
- *    Dati importanti generici:
- *      - Data inizio/fine Scuola
- *      - Giorni festivi
- *      - Quando si fanno 8h con quella classe?
- *      - Il Weekend si và a scuola?
- *
- *    Dati Importanti Prof:
- *      - Nome professore
- *      - Materie e codice materia
- *      - Ore materie per classi
- *      - Punteggio materie per classe
- *      - Assenze Prof
- *
- *    Algoritmo calcolo importanza:
- *      - Ore totali materia classe(ore) + disponibilità(5-8 per gg) + preferenze sul giorno(5-8 per gg)
- *    Come distribuire al meglio le ore:
- *        Si prenderanno in considerazione il numero totali di settimane disponibili e il numero di ore dell'anno scolastico poi si farà una media per classe
- *
- *    Esp funzionamento Algoritmo Backend (passaggi):
- *      1) Sql estrapolerà il json
- *      2) Salvataggio json in una cartella con la dicitura ANNO/MESE/GIORNO_JSON (Implementare)
- *      3) Il json verrà passato ad un algoritmo che determinerà l'importanza di una materia per quella classe
- *      4) Ora l'algoritmo genererà l'orario prendendo in considerazione l'imporanza della classe -> poi il professore(ORD_PROF) -> festivi -> asssenze prof
- *          ->  verifica le ore massime della giornata -> inserimento dato e incremento giorno -> ricicla
- *
- *    Che dati dovranno essere salvati nel database?
- *      -
- *
- *    funzionamento Frontend:
- *      - Il progetto finale prevede che la segreteria immetta dentro dei form tutte le informazioni dei professori e che le possa ricambiare
- *      - Ci sarà una configurazione rapida e una super ???
- *      - Lettura di un json (il meno datato) e auto-configurare delle form(per evitare di riscrivere tutto)
- *
- *    FAQS::
- *      Sarà possibile gestire delle eccezioni riguardanti ad un range di orario (esp: il prof xx stò a casa la 1° e la 3° ora)???
- *
- *
- */
+* @DISCLAIMER::
+*  Per funzionare correttamente bisogna cavare via il tempo massimo di esecuzione del codice
+*
+* @TODO:: ## ALGORITMO CALENDARIO ##
+*    Dati importanti generici:
+*      - Data inizio/fine Scuola
+*      - Giorni festivi
+*      - Quando si fanno 8h con quella classe?
+*      - Il Weekend si và a scuola?
+*
+*    Dati Importanti Prof:
+*      - Nome professore
+*      - Materie e codice materia
+*      - Ore materie per classi
+*      - Punteggio materie per classe
+*      - Assenze Prof
+*
+*    Algoritmo calcolo importanza:
+*      - Ore totali materia classe(ore) + disponibilità(5-8 per gg) + preferenze sul giorno(5-8 per gg)
+*    Come distribuire al meglio le ore:
+*        Si prenderanno in considerazione il numero totali di settimane disponibili e il numero di ore dell'anno scolastico poi si farà una media per classe
+*
+*    Esp funzionamento Algoritmo Backend (passaggi):
+*      1) Sql estrapolerà il json
+*      2) Salvataggio json in una cartella con la dicitura ANNO/MESE/GIORNO_JSON (Implementare)
+*      3) Il json verrà passato ad un algoritmo che determinerà l'importanza di una materia per quella classe
+*      4) Ora l'algoritmo genererà l'orario prendendo in considerazione l'imporanza della classe -> poi il professore(ORD_PROF) -> festivi -> asssenze prof
+*          ->  verifica le ore massime della giornata -> inserimento dato e incremento giorno -> ricicla
+*
+*    Che dati dovranno essere salvati nel database?
+*      -
+*
+*    funzionamento Frontend:
+*      - Il progetto finale prevede che la segreteria immetta dentro dei form tutte le informazioni dei professori e che le possa ricambiare
+*      - Ci sarà una configurazione rapida e una super ???
+*      - Lettura di un json (il meno datato) e auto-configurare delle form(per evitare di riscrivere tutto)
+*
+*    FAQS::
+*      Sarà possibile gestire delle eccezioni riguardanti ad un range di orario (esp: il prof xx stò a casa la 1° e la 3° ora)???
+*
+*
+*/
 
 /* Impostazioni */
 $ORD_PROF = ["0","1","2","3","4","5"];
@@ -75,8 +75,8 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
     $classe = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
     $scuola = new Scuola($DATE_SCUOLA, $classroom);
     $rientro = new Rientro($RIENTRO_CLASSE, $classroom);
-    $todayReti = new Today($scuola -> inizioReti, $rientro -> giorniReti);
-    $todayMulti = new Today($scuola -> inizioMulti, $rientro -> giorniMulti);
+    $todayReti = new Today($scuola -> inizioReti, $rientro -> giorniReti, $FESTIVI);
+    $todayMulti = new Today($scuola -> inizioMulti, $rientro -> giorniMulti, $FESTIVI);
     // ciclo per la classe reti
     while (isSameDay($todayReti, $scuola -> fineReti)) {
       if ($todayReti -> festivo === false && $todayReti -> riposo === false) {
@@ -133,7 +133,7 @@ class InsegnanteMateria extends Insegnante {
     $this -> preferenzeGiorni = $this -> preferenze["giorni"] || null; // array
   }
 
- /**
+  /**
   * Algoritmo calcolo importanza:
   * - Ore totali materia classe(ore) + disponibilità(5-8 per gg) + preferenze sul giorno(5-8 per gg)
   * Come distribuire al meglio le ore:
@@ -151,7 +151,7 @@ class InsegnanteMateria extends Insegnante {
   function calcoloPunteggio($tot_ore, $disp, $preferenzeGiorni) {
     return $tot_ore + $disp + $preferenzeGiorni;
   }
- /**
+  /**
   *
   * @param $settings array con tutte le impostazioni
   *
@@ -169,8 +169,8 @@ class InsegnanteMateria extends Insegnante {
   *      "fineReti"   => $rientro -> fineReti,
   *    ],
   *    "classe" => [
-  *      "oreTotaliA" => $classe -> oreTotaliRetiA,
-  *      "oreTotaliB" => $classe -> oreTotaliRetiB
+  *      "oreTotaliA" => $classe -> oreTotaliReti,
+  *      "oreTotaliB" => $classe -> oreTotaliReti
   *    ]
   * ];
   *

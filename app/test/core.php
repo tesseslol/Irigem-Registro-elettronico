@@ -7,6 +7,7 @@
  * @return boolean       Ritorna true se è un giorno di vacanza
  */
 function isHoliday ($date) {
+  global $CALENDARIO, $NR_FESTIVI;
   $result = false;
   for ($i=0; $i < $NR_FESTIVI; $i++) {
     $inizio = $CALENDARIO["festivi"]["data"][$i]["inizio"];
@@ -19,7 +20,7 @@ function isHoliday ($date) {
       }
     }
   }
-  return result;
+  return $result;
 }
 /**
  * Verifica se la data immessa è una giornata di riposo (esempio giorno di riposo: sabato)
@@ -29,15 +30,20 @@ function isHoliday ($date) {
  * @return boolean         Ritorna true se è un giorno di riposo
  */
 function isDayOfRest ($rest, $date) {
+  global $NR_GIORNI_RIPOSO;
   $result = false;
-  for ($i = 0; i < $NR_GIORNI_RIPOSO; $i++) {
-    if (getWeekdayInItaly($date) == $rest[$i]) {
-      $result = true;
-      break 1;
+  $date_count = count($date);
+  for ($i = 0; $i < $NR_GIORNI_RIPOSO; $i++) {
+    for ($i2 = 0; $i2 < $date_count; $i2++) {
+      if (getWeekdayInItaly($date[$i2]) == $rest[$i]) {
+        $result = true;
+        break 1;
+      }
     }
   }
-  return result;
+  return $result;
 }
+
 
 function isReentryDay ($data, $inizio, $fine, $rientri) {
   $result = false;

@@ -1,7 +1,7 @@
-<?php 
+<?php
   // controllo accesso
   session_start();
-  (empty($_SESSION["id"]) || $_SESSION["diritti"] != "i" ? header("location: ../login/") : "");
+  //(empty($_SESSION["id"]) || $_SESSION["diritti"] != "i" ? header("location: ../login/") : "");
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Registro elettronico</title>
-      <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+       <link href="../../bower_components/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
        <link rel="stylesheet" type="text/css" href="../vendor/datatables/datatables.min.css"/>
        <link rel="stylesheet" type="text/css" href="../src/css/style.css">
 
@@ -33,7 +33,7 @@
           </button>
           <a class="navbar-brand" href="#">Registro Segreteria</a>
         </div>
-  
+
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Calendario<span class="sr-only">(current)</span></a></li>
@@ -42,9 +42,9 @@
           <ul class="nav navbar-nav navbar-right navbar--margin-right-none">
             <li><a href="#">Esci</a></li>
             <li class="dropdown">
-              
+
               <button type="button" class="btn btn-default navbar-btn" aria-label="Left Align">
-                  <span style="text-transform: capitalize;"><?php echo $_SESSION["utente"]; ?></span>
+                  <span style="text-transform: capitalize;"><?php //echo $_SESSION["utente"]; ?></span>
                   <span class="glyphicon glyphicon-user glyphicon--top-3" aria-hidden="true"></span>
               </button>
               <ul class="dropdown-menu">
@@ -72,10 +72,10 @@
 
       <!-- Tab panes -->
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="calendario1"> 
+        <div role="tabpanel" class="tab-pane active" id="calendario1">
           <table id="tabella1" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
             <thead>
-              <tr> 
+              <tr>
 	            <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -86,7 +86,7 @@
               </tr>
             </thead>
             <tfoot>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -101,7 +101,7 @@
         <div role="tabpanel" class="tab-pane" id="vecchio_calendario1">
           <table id="tabella2" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
             <thead>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -112,7 +112,7 @@
               </tr>
             </thead>
             <tfoot>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -127,7 +127,7 @@
         <div role="tabpanel" class="tab-pane" id="calendario7g1">
           <table id="tabella3" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
             <thead>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -138,7 +138,7 @@
               </tr>
             </thead>
             <tfoot>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -153,7 +153,7 @@
         <div role="tabpanel" class="tab-pane" id="calendarioora1">
           <table id="tabella4" class="table table-striped table-bordered display nowrap" cellspacing="0" width="100%">
             <thead>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -164,7 +164,7 @@
               </tr>
             </thead>
             <tfoot>
-              <tr> 
+              <tr>
                 <th>id</th>
 	            <th>insegnante</th>
 	            <th>classe</th>
@@ -178,7 +178,7 @@
         </div>
       </div>
     </div>
-               
+
 
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
       <script type="text/javascript" src="../vendor/jquery/jquery.min.js"></script>

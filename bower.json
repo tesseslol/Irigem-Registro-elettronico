@@ -4,7 +4,9 @@
   "dependencies": {
     "bootstrap-sass": "~3.3.5",
     "modernizr": "~2.8.1",
-    "gentelella": "^1.4.0"
+    "gentelella": "^1.4.0",
+    "datatables.net": "^2.1.1",
+    "datatables.net-bs": "^2.1.1"
   },
   "overrides": {
     "bootstrap-sass": {
