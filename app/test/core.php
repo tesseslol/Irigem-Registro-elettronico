@@ -8,20 +8,21 @@
  */
 function isHoliday ($date) {
   global $CALENDARIO, $NR_FESTIVI;
+  $date = date('Y-m-d', strtotime($date));
   $result = false;
   for ($i=0; $i < $NR_FESTIVI; $i++) {
     $inizio = $CALENDARIO["festivi"]["data"][$i]["inizio"];
     $fine = $CALENDARIO["festivi"]["data"][$i]["fine"];
-    while (isSameDay($inizio, $fine)) {
-      $inizio = date('Y-m-d', strtotime($inizio . ' +1 day'));
-      if (isSameDay($inizio, $date)) {
-        $result = true;
-        break 2;
-      }
+    $inizio = date('Y-m-d', strtotime($inizio));
+    $fine = date('Y-m-d', strtotime($fine));
+    if (($date >= $inizio) && ($date <= $fine)) {
+      $result = true;
+      break 1;
     }
   }
   return $result;
 }
+
 /**
  * Verifica se la data immessa è una giornata di riposo (esempio giorno di riposo: sabato)
  *
@@ -29,26 +30,39 @@ function isHoliday ($date) {
  * @param  date    $date Data per il confronto
  * @return boolean         Ritorna true se è un giorno di riposo
  */
-function isDayOfRest ($rest, $date) {
-  global $NR_GIORNI_RIPOSO;
+function isDayOfRest ($date, $rest) {
   $result = false;
   $date_count = count($date);
+  $NR_GIORNI_RIPOSO = count($rest);
   for ($i = 0; $i < $NR_GIORNI_RIPOSO; $i++) {
-    for ($i2 = 0; $i2 < $date_count; $i2++) {
-      if (getWeekdayInItaly($date[$i2]) == $rest[$i]) {
-        $result = true;
-        break 1;
-      }
+    if (getWeekdayInItaly($date) == $rest[$i]) {
+      $result = true;
+      break 1;
     }
   }
   return $result;
 }
 
-
-function isReentryDay ($data, $inizio, $fine, $rientri) {
+function isReentryDay ($date, $inizio, $fine, $rientri) {
   $result = false;
   foreach ($rientri as $rientro) {
     if ($inizio <= $date && $fine >= $date && getWeekdayInItaly($date) == $rientro) {
+      $result = true;
+      break 1;
+    }
+  }
+  return $result;
+}
+
+function isAbsenceDay ($date, $assenze) {
+  $result = false;
+  $date = date('Y-m-d', strtotime($date));
+  foreach ($assenze as $assenza) {
+    $inizio = $assenza["inizio"];
+    $fine = $assenza["fine"];
+    $inizio = date('Y-m-d', strtotime($inizio));
+    $fine = date('Y-m-d', strtotime($fine));
+    if (($date >= $inizio) && ($date <= $fine)) {
       $result = true;
       break 1;
     }

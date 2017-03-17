@@ -12,43 +12,43 @@ $CALENDARIO = [
           "1"=>[
             "reti"=>[
               "punteggio"=>0,
-              "ore"=>5
+              "ore"=>6
             ],
             "multi"=>[
               "punteggio"=>0,
-              "ore"=>7
+              "ore"=>20
             ]
           ],
           "2"=>[
             "reti"=>[
               "punteggio"=>0,
-              "ore"=>6
-            ]
-          ],
+              "ore"=>40
+            ],
           "multi"=>[
             "punteggio"=>0,
-            "ore"=>7
+            "ore"=>0
           ]
         ],
         "3"=>[
           "reti"=>[
             "punteggio"=>0,
-            "ore"=>6
+            "ore"=>60
           ],
           "multi"=>[
             "punteggio"=>0,
-            "ore"=>7
+            "ore"=>60
           ]
         ],
         "4"=>[
           "reti"=>[
             "punteggio"=>0,
-            "ore"=>6
+            "ore"=>60
           ],
           "multi"=>[
             "punteggio"=>0,
-            "ore"=>7
+            "ore"=>40
           ]
+        ]
         ],
         "preferenze"=>[
           "ore"=>[
@@ -70,12 +70,8 @@ $CALENDARIO = [
       "assenze"=>[
         "data"=>[
           [
-            "inizio"=>"13/10/1999",
-            "fine"=>"12/10/1999"
-          ],
-          [
-            "inizio"=>"12/11/1999",
-            "fine"=>"13/11/1999"
+            "inizio"=>"2016/10/14",
+            "fine"=>"2016/12/14"
           ]
         ]
       ]
@@ -84,8 +80,8 @@ $CALENDARIO = [
   "festivi"=>[
     "data"=>[
       [
-        "inizio"=>"10/12/1999",
-        "fine"=>"12/12/2000"
+        "inizio"=>"2016/8/14",
+        "fine"=>"2016/8/17"
       ]
     ],
     "giorni"=>[
@@ -168,64 +164,73 @@ $CALENDARIO = [
       ]
     ]
   ],
-  "date_scuola"=>[
+  "orari_scuola"=>[
     "classe"=>[
       "1"=>[
         "reti"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "2"=>[
         "reti"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "3"=>[
         "reti"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ],
       "4"=>[
         "reti"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ],
         "multi"=>[
+          "ore_annuali"=>990,
           "inizio"=>"2016/8/14",
           "fine"=>"2017/6/1"
         ]
       ]
+    ],
+    "orario"=>[
+      "lezioni"=>[
+        "8.15",
+        "9.15",
+        "10.15",
+        "11.15", // merenda
+        "11.25",
+        "12.25",
+        "13.25", // rientro
+        "14.15",
+        "15.15",
+        "16.15",
+        "17.15"
+      ]
     ]
   ],
   "nr_classi"=>4,
-  "orario"=>[
-    "lezioni"=>[
-      "8.15",
-      "9.15",
-      "10.15",
-      "11.15", // merenda
-      "11.25",
-      "12.25",
-      "13.25", // rientro
-      "14.15",
-      "15.15",
-      "16.15",
-      "17.15"
-    ]
-  ]
+
 ];
