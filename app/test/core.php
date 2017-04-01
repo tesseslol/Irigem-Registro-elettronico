@@ -77,7 +77,7 @@ function isAbsenceDay ($date, $assenze) {
  * @return boolean       Ritorna vero se le due date sono uguali
  */
 function isSameDay ($day1, $day2) {
-  return $day1 === $day2;
+  return $day1 == $day2;
 }
 /**
  * Verifica se la lunghezza del array è uguale al numero

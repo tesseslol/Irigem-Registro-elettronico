@@ -2,7 +2,7 @@
 /* inclusioni */
 include "json.php"; // contiene la variabile-array calendario
 include "core.php"; // contiene la classe CoreFunction
-
+set_time_limit(20000);
 /**
 * @DISCLAIMER::
 *  Per funzionare correttamente bisogna cavare via il tempo massimo di esecuzione del codice
@@ -71,11 +71,11 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
     $todayReti = new Today($scuola -> inizioReti, $RIPOSO, $rientro -> inizioReti, $rientro -> fineReti, $rientro -> giorniReti, $insegnante -> assenze);
     $todayMulti = new Today($scuola -> inizioMulti, $RIPOSO, $rientro -> inizioMulti, $rientro -> fineMulti, $rientro -> giorniMulti, $insegnante -> assenze);
 
-    // calcolo percentuale punteggio
+    // calcolo percentuale punteggio Reti
     $punteggio_ore_totali_reti = round($insegnante -> oreTotaliReti * 100 / $scuola -> oreAnnualiReti);
     // calcolo assenze professore
     $contatoreAssenze = 0;
-    while (isSameDay($todayReti -> data, $scuola -> fineReti)) {
+    while (!($todayReti -> data == $scuola -> fineReti)) {
       if ($todayReti -> festivo == false && $todayReti -> riposo == false && $todayReti -> profAssente) {
         if ($todayReti -> rientro) {
           $todayHour = $rientro -> oreReti;
@@ -85,9 +85,30 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
         $contatoreAssenze += $todayHour;
       }
       $todayReti -> addOneDay();
+      // echo $todayReti -> data . "<br>";
     }
-    $punteggio_ore_assenze_reti = round($contatoreAssenze * 100 / $scuola -> oreAnnualiReti);
-    $insegnante -> punteggioReti = $punteggio_ore_assenze_reti + $punteggio_ore_totali_reti % 100;
+    $punteggio_ore_assenze_multi = round($contatoreAssenze * 100 / $scuola -> oreAnnualiMulti);
+    $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
+    // print($insegnante -> punteggioMulti . "<br>");
+
+    // calcolo percentuale punteggio Multimediale
+    $punteggio_ore_totali_multi = round($insegnante -> oreTotaliMulti * 100 / $scuola -> oreAnnualiMulti);
+    // calcolo assenze professore
+    $contatoreAssenze = 0;
+    while (!($todayMulti -> data == $scuola -> fineMulti)) {
+      if ($todayMulti -> festivo == false && $todayMulti -> riposo == false && $todayMulti -> profAssente) {
+        if ($todayMulti -> rientro) {
+          $todayHour = $rientro -> oreMulti;
+        } else {
+          $todayHour = 5;
+        }
+        $contatoreAssenze += $todayHour;
+      }
+      $todayMulti -> addOneDay();
+      // echo $todayMulti -> data . "<br>";
+    }
+    $punteggio_ore_assenze_multi = round($contatoreAssenze * 100 / $scuola -> oreAnnualiMulti);
+    $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
   }
 }
 // @TODO algoritmo riordinamento importanza professori
@@ -190,12 +211,12 @@ class Scuola extends Classe {
     parent::__construct($Scuola, $classe);
     // reti
     $this -> oreAnnualiReti = $this -> reti["ore_annuali"];
-    $this -> inizioReti = $this -> reti["inizio"];
-    $this -> fineReti = $this -> reti["fine"];
+    $this -> inizioReti = getDateFormat($this -> reti["inizio"]);
+    $this -> fineReti = getDateFormat($this -> reti["fine"]);
     // multi
     $this -> oreAnnualiMulti = $this -> multi["ore_annuali"];
-    $this -> inizioMulti = $this -> multi["inizio"];
-    $this -> fineMulti = $this -> multi["fine"];
+    $this -> inizioMulti = getDateFormat($this -> multi["inizio"]);
+    $this -> fineMulti = getDateFormat($this -> multi["fine"]);
   }
 }
 
@@ -228,7 +249,7 @@ class Today {
     $this -> festivo = isHoliday($this -> data);
     $this -> riposo = isDayOfRest($this -> data, $this -> rest);
     if ($this -> assenze_professore !== null) {
-      $this -> profAssente = isAbsenceDay($this -> date, $this -> assenze_professore);
+      $this -> profAssente = isAbsenceDay($this -> data, $this -> assenze_professore);
     }
     if ($this -> restProf !== null) {
       $this -> riposoProf = isDayOfRest($this -> data, $this -> restProf);
