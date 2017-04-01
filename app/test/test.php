@@ -62,7 +62,6 @@ $NR_CLASSI = $CALENDARIO["nr_classi"];
 $NR_FESTIVI = count($FESTIVI["data"]);
 $NR_PROF = count($INSEGNANTI);
 
-// @TODO algoritmo calcolo importanza professori
 for ($prof = 0; $prof < $NR_PROF; $prof++) {
   for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
     $insegnante = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
@@ -87,8 +86,9 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
       $todayReti -> addOneDay();
       // echo $todayReti -> data . "<br>";
     }
-    $punteggio_ore_assenze_multi = round($contatoreAssenze * 100 / $scuola -> oreAnnualiMulti);
-    $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
+
+    $punteggio_ore_assenze_reti = round($contatoreAssenze * 100 / $scuola -> oreAnnualiReti);
+    $insegnante -> punteggioReti = $punteggio_ore_assenze_reti + $punteggio_ore_totali_reti;
     // print($insegnante -> punteggioMulti . "<br>");
 
     // calcolo percentuale punteggio Multimediale
@@ -111,6 +111,7 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
     $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
   }
 }
+
 // @TODO algoritmo riordinamento importanza professori
 /*
 // algoritmo che posiziona i professori
