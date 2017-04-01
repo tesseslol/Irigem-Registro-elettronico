@@ -62,6 +62,8 @@ $NR_CLASSI = $CALENDARIO["nr_classi"];
 $NR_FESTIVI = count($FESTIVI["data"]);
 $NR_PROF = count($INSEGNANTI);
 
+$punteggiReti = [];
+$punteggiMulti = [];
 for ($prof = 0; $prof < $NR_PROF; $prof++) {
   for ($classroom = 1; $classroom < $NR_CLASSI + 1; $classroom++) {
     $insegnante = new InsegnanteMateria($prof, $INSEGNANTI, $classroom);
@@ -89,7 +91,8 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
 
     $punteggio_ore_assenze_reti = round($contatoreAssenze * 100 / $scuola -> oreAnnualiReti);
     $insegnante -> punteggioReti = $punteggio_ore_assenze_reti + $punteggio_ore_totali_reti;
-    // print($insegnante -> punteggioMulti . "<br>");
+    // print($insegnante -> punteggioReti . "<br>");
+    $punteggiReti[$classroom . "Reti"][$insegnante -> nomeCompleto] = $insegnante -> punteggioReti;
 
     // calcolo percentuale punteggio Multimediale
     $punteggio_ore_totali_multi = round($insegnante -> oreTotaliMulti * 100 / $scuola -> oreAnnualiMulti);
@@ -109,8 +112,35 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
     }
     $punteggio_ore_assenze_multi = round($contatoreAssenze * 100 / $scuola -> oreAnnualiMulti);
     $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
+    $punteggiMulti[$classroom . "Multi"][$insegnante -> nomeCompleto] = $insegnante -> punteggioMulti;
   }
 }
+function sortProf ($points) {
+  $sorted = $points;
+  for ($classroom = 1; $classroom < 4 + 1; $classroom++) {
+    $profRetiLength = sizeof($sorted[$classroom . "Reti"]) - 1;
+    for ($i = 0; $i < $profRetiLength; $i++) {
+      if ($sorted[$classroom . "Reti"][$i] < $sorted[$classroom . "Reti"][$i + 1]) {
+        $tmp = $sorted[$classroom . "Reti"][$i];
+        $sorted[$classroom . "Reti"][$i] = $sorted[$classroom . "Reti"][$i + 1];
+        $sorted[$classroom . "Reti"][$i + 1] = $tmp;
+      }
+    }
+
+    $profMultiLength = sizeof($sorted[$classroom . "Multi"]) - 1;
+    for ($i = 0; $i < $profMultiLength; $i++) {
+      if ($sorted[$classroom . "Multi"][$i] < $sorted[$classroom . "Multi"][$i + 1]) {
+        $tmp = $sorted[$classroom . "Multi"][$i];
+        $sorted[$classroom . "Multi"][$i] = $sorted[$classroom . "Multi"][$i + 1];
+        $sorted[$classroom . "Multi"][$i + 1] = $tmp;
+      }
+    }
+  }
+  return $sorted;
+}
+print_r($punteggiReti);
+$punteggiReti = sortProf($punteggiReti);
+$punteggiMulti = sortProf($punteggiMulti);
 
 // @TODO algoritmo riordinamento importanza professori
 /*
@@ -154,6 +184,7 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
 class Insegnante {
   function __construct($insegnante, $insegnanti, $classe) {
     $this -> prof = $insegnanti[$insegnante];
+    $this -> nomeCompleto = $this -> prof["nome"] . " " . $this -> prof["cognome"];
     $this -> materia = $this -> prof["materia"];
     $this -> preferenze = $this -> materia["preferenze"];
     $this -> sezione = $this -> materia["classe"][$classe];
