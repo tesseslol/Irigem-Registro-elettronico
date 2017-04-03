@@ -11,41 +11,33 @@ $CALENDARIO = [
         "classe"=>[
           "1"=>[
             "reti"=>[
-              "punteggio"=>0,
               "ore"=>6
             ],
             "multi"=>[
-              "punteggio"=>0,
               "ore"=>20
             ]
           ],
           "2"=>[
             "reti"=>[
-              "punteggio"=>0,
               "ore"=>40
             ],
           "multi"=>[
-            "punteggio"=>0,
             "ore"=>0
           ]
         ],
         "3"=>[
           "reti"=>[
-            "punteggio"=>0,
             "ore"=>60
           ],
           "multi"=>[
-            "punteggio"=>0,
             "ore"=>60
           ]
         ],
         "4"=>[
           "reti"=>[
-            "punteggio"=>0,
             "ore"=>60
           ],
           "multi"=>[
-            "punteggio"=>0,
             "ore"=>40
           ]
         ]
@@ -71,6 +63,72 @@ $CALENDARIO = [
         "data"=>[
           [
             "inizio"=>"2016/10/14",
+            "fine"=>"2016/12/14"
+          ]
+        ]
+      ]
+    ],
+    [
+      "nome"=>"Secondo",
+      "cognome"=>"Festa",
+      "materia"=>[
+        "nome"=>"matematica",
+        "codice"=>"PPOA",
+        "classe"=>[
+          "1"=>[
+            "reti"=>[
+              "ore"=>2
+            ],
+            "multi"=>[
+              "ore"=>20
+            ]
+          ],
+          "2"=>[
+            "reti"=>[
+              "ore"=>90
+            ],
+          "multi"=>[
+            "ore"=>10
+          ]
+        ],
+        "3"=>[
+          "reti"=>[
+            "ore"=>200
+          ],
+          "multi"=>[
+            "ore"=>20
+          ]
+        ],
+        "4"=>[
+          "reti"=>[
+            "ore"=>10
+          ],
+          "multi"=>[
+            "ore"=>10
+          ]
+        ]
+        ],
+        "preferenze"=>[
+          "ore"=>[
+            "classe"=>[
+              "1"=>1,
+              "2"=>2,
+              "3"=>3,
+              "4"=>2
+            ]
+          ],
+          /* giorno della settimana in cui il prof è a casa */
+          "giorni"=>[
+            [
+              "giovedì", "venerdì", "martedì"
+            ]
+          ]
+        ]
+      ],
+      "assenze"=>[
+        "data"=>[
+          [
+            "inizio"=>"2016/11/14",
             "fine"=>"2016/12/14"
           ]
         ]

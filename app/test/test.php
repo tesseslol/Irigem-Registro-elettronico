@@ -90,9 +90,9 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
     }
 
     $punteggio_ore_assenze_reti = round($contatoreAssenze * 100 / $scuola -> oreAnnualiReti);
-    $insegnante -> punteggioReti = $punteggio_ore_assenze_reti + $punteggio_ore_totali_reti;
+    $punteggioReti = $punteggio_ore_assenze_reti + $punteggio_ore_totali_reti;
     // print($insegnante -> punteggioReti . "<br>");
-    $punteggiReti[$classroom . "Reti"][$insegnante -> nomeCompleto] = $insegnante -> punteggioReti;
+    $punteggiReti[$classroom . "Reti"][$insegnante -> nomeCompleto] = $punteggioReti;
 
     // calcolo percentuale punteggio Multimediale
     $punteggio_ore_totali_multi = round($insegnante -> oreTotaliMulti * 100 / $scuola -> oreAnnualiMulti);
@@ -111,36 +111,33 @@ for ($prof = 0; $prof < $NR_PROF; $prof++) {
       // echo $todayMulti -> data . "<br>";
     }
     $punteggio_ore_assenze_multi = round($contatoreAssenze * 100 / $scuola -> oreAnnualiMulti);
-    $insegnante -> punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
-    $punteggiMulti[$classroom . "Multi"][$insegnante -> nomeCompleto] = $insegnante -> punteggioMulti;
+    $punteggioMulti = $punteggio_ore_assenze_multi + $punteggio_ore_totali_multi;
+    $punteggiMulti[$classroom . "Multi"][$insegnante -> nomeCompleto] = $punteggioMulti;
   }
 }
-function sortProf ($points) {
+function sortProf ($points, $name) {
   $sorted = $points;
-  for ($classroom = 1; $classroom < 4 + 1; $classroom++) {
-    $profRetiLength = sizeof($sorted[$classroom . "Reti"]) - 1;
-    for ($i = 0; $i < $profRetiLength; $i++) {
-      if ($sorted[$classroom . "Reti"][$i] < $sorted[$classroom . "Reti"][$i + 1]) {
-        $tmp = $sorted[$classroom . "Reti"][$i];
-        $sorted[$classroom . "Reti"][$i] = $sorted[$classroom . "Reti"][$i + 1];
-        $sorted[$classroom . "Reti"][$i + 1] = $tmp;
+  for ($classroom = 1; $classroom < 4; $classroom++) {
+    $profLength = count($sorted[$classroom . $name]);
+    for ($i = 0; $i < $profLength; $i++) {
+      if (empty($sorted[$classroom . $name][$i + 1])) {
+        continue;
+      } else {
+        if ($sorted[$classroom . $name][$i] < $sorted[$classroom . $name][$i + 1]) {
+          $tmp = $sorted[$classroom . $name][$i];
+          $sorted[$classroom . $name][$i] = $sorted[$classroom . $name][$i + 1];
+          $sorted[$classroom . $name][$i + 1] = $tmp;
+        }
       }
     }
-
-    $profMultiLength = sizeof($sorted[$classroom . "Multi"]) - 1;
-    for ($i = 0; $i < $profMultiLength; $i++) {
-      if ($sorted[$classroom . "Multi"][$i] < $sorted[$classroom . "Multi"][$i + 1]) {
-        $tmp = $sorted[$classroom . "Multi"][$i];
-        $sorted[$classroom . "Multi"][$i] = $sorted[$classroom . "Multi"][$i + 1];
-        $sorted[$classroom . "Multi"][$i + 1] = $tmp;
-      }
-    }
+    return $sorted;
   }
-  return $sorted;
 }
+$punteggiReti = sortProf($punteggiReti, "Reti");
+$punteggiMulti = sortProf($punteggiMulti, "Multi");
 print_r($punteggiReti);
-$punteggiReti = sortProf($punteggiReti);
-$punteggiMulti = sortProf($punteggiMulti);
+echo "<br>";
+print_r($punteggiMulti);
 
 // @TODO algoritmo riordinamento importanza professori
 /*
@@ -203,8 +200,6 @@ class InsegnanteMateria extends Insegnante {
     // nr totali ore classe e punteggio che ha quella classe
     $this -> oreTotaliReti = $this -> reti["ore"];
     $this -> oreTotaliMulti = $this -> multi["ore"];
-    $this -> punteggioReti = $this -> reti["punteggio"];
-    $this -> punteggioMulti = $this -> multi["punteggio"];
     // preferenze orario
     $this -> preferenzeOre = $this -> preferenze["ore"]["classe"][$classe];
     $this -> preferenzeGiorni = $this -> preferenze["giorni"]; // array
